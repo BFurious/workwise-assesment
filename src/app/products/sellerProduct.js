@@ -262,7 +262,7 @@ const SellerProduct = () => {
                     {showPopup.show === true && <PopUpMessage messageArray={showPopup.messageArray} />}
                 </>
             ) : (
-                <P> no products to show</P>
+                <p> no products to show</p>
             )
             }
         </>

@@ -73,7 +73,7 @@ const UserInformation = () => {
     };
 
     const handleLogout = () => {
-        useDispatch(logout);
+        dispatch(logout);
         localStorage.removeItem('token');
         router.push('/login');
     };

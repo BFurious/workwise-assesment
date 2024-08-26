@@ -2,7 +2,7 @@
 import React, { forwardRef } from 'react';
 
 // this component will show the extra features when the option is selcted as per the Ids
-const ExpandableOptions = forwardRef((props, ref) => {
+const ExpandableOptions = ((props, ref) => {
     return (
         <div ref={ref} className="mt-4 space-y-4 transition-max-height duration-500 ease-in-out flex flex-row items-center">
             <div className="mt-2 space-y-2 flex flex-col items-center flex-1">

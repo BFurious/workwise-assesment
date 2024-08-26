@@ -2,32 +2,37 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+
+.custom-checkbox input[type="checkbox"] {
+  appearance: none;
+  border: 2px solid #d1d5db; /* Tailwind color gray-300 */
+  border-radius: 50%;
+  cursor: pointer;
+  position: relative;
+  position: relative;
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
+.custom-checkbox input[type="checkbox"]:checked {
+  background-color: #3ff53f;
+  border: 2px solid #59f081; /* Optional: border color same as background */
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+.custom-checkbox input[type="checkbox"]:checked::after {
+  content: '';
+  display: block;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 50%;
+  height: 50%;
+  background-color: white;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+.custom-checkbox input[type="checkbox"]:checked::before {
+  opacity: 1; /* Show inner circle when checked */
 }

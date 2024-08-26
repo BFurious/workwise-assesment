@@ -20,15 +20,15 @@ const SellerProduct = () => {
 
     const [addMoreMode, setAddMoreMode] = useState(false);
     const [editMode, setEditMode] = useState(false);
-    const [products, setproducts] = useState([ ])
+    const [products, setproducts] = useState([])
 
     const initialEditFormData = {
         fields: [
-            { name: 'name', label:'Name', type: 'text', placeholder: 'Enter product name', value: selectedOption?.name},
-            { name: 'category', label:'Category', type: 'text', placeholder: 'Enter product category', value: selectedOption?.category },
-            { name: 'description', label:'Description', type: 'text', placeholder: 'Enter item description', value: selectedOption?.description },
-            { name: 'price', label:'Name', Price: 'text', placeholder: 'Enter product price', value: selectedOption?.price },
-            { name: 'discount', label:'Discount', type: 'text', placeholder: 'Enter product discount', value: selectedOption?.discount }
+            { name: 'name', label: 'Name', type: 'text', placeholder: 'Enter product name', value: selectedOption?.name },
+            { name: 'category', label: 'Category', type: 'text', placeholder: 'Enter product category', value: selectedOption?.category },
+            { name: 'description', label: 'Description', type: 'text', placeholder: 'Enter item description', value: selectedOption?.description },
+            { name: 'price', label: 'Name', Price: 'text', placeholder: 'Enter product price', value: selectedOption?.price },
+            { name: 'discount', label: 'Discount', type: 'text', placeholder: 'Enter product discount', value: selectedOption?.discount }
         ],
     };
     const initialAddFormData = {
@@ -47,7 +47,7 @@ const SellerProduct = () => {
         tempErrors.price = formData.price ? '' : 'price is required';
         const errors = Object.entries(tempErrors).filter(([key, value]) => value !== "");
         // The result will be an array of key-value pairs (tuples) where value is the error message
-        return  Object.fromEntries(errors);;
+        return Object.fromEntries(errors);;
     };
 
     useEffect(() => {
@@ -55,8 +55,8 @@ const SellerProduct = () => {
     }, []);
 
     const handleEditProduct = async (formData) => {
-        
-        if(!selectedOption){
+
+        if (!selectedOption) {
             setErrors({})
         }
         try {
@@ -69,16 +69,18 @@ const SellerProduct = () => {
                 },
                 data: JSON.stringify(formData),
             });
-            if (response.status!=200) throw new Error('Error updating product');
+            if (response.status != 200) 
+                throw new Error('Error updating product');
+            
             setShowPopup({ show: true, messageArray: ["Edited", "Edited item Sucessfully try more"] })
-                setTimeout(() => {
-                    setShowPopup(false);
-                }, 3000);
+            setTimeout(() => {
+                setShowPopup(false);
+            }, 3000);
             setEditMode(false);
             router.push('/products');
         } catch (error) {
             setEditMode(false);
-           alert(error);
+            alert(error);
         }
     };
     const handleAddProducts = async () => {
@@ -96,11 +98,13 @@ const SellerProduct = () => {
                 },
                 data: JSON.stringify(formData),
             });
-            if (response.status!=200) throw new Error('Error adding product');
+            if (response.status != 201)
+                throw new Error('Error adding product');
+
             setShowPopup({ show: true, messageArray: ["Added Iten", "Added item Sucessfully try more"] })
-                setTimeout(() => {
-                    setShowPopup(false);
-                }, 3000);
+            setTimeout(() => {
+                setShowPopup(false);
+            }, 3000);
             setAddMoreMode(false);
             router.push('/products');
         } catch (error) {
@@ -109,30 +113,25 @@ const SellerProduct = () => {
         }
     }
 
-    
-
-    const onSave = () => {
-        setEditMode(false);
-        handleSellerProducts(); // Refresh currentUser data
-    };
-
-
     const handleEdit = () => {
         if (selectedOption) {
             setEditMode(true);
         } else {
-            setErrors({name:"Can edit one at a time for now"})
+            setErrors({ name: "Can edit one at a time for now" })
         }
     };
     const handleDelete = async () => {
         if (selectedOption) {
             try {
-                const token = localStorage.getItem('token'); 
-                await axios.delete(`${process.env.NEXT_PUBLIC_BASE_URL}/seller/product/delete/${selectedOption?.id}`,{
-                    headers:{
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                }});
+                const token = localStorage.getItem('token');
+                const response = axios.delete(`${process.env.NEXT_PUBLIC_BASE_URL}/seller/product/delete/${selectedOption?.id}`, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                if (response.status != 204)
+                    throw new Error('Error deleting product');
                 setShowPopup({ show: true, messageArray: ["Deleted", "Deleted item Sucessfully try more"] })
                 setTimeout(() => {
                     setShowPopup(false);
@@ -153,12 +152,13 @@ const SellerProduct = () => {
 
     const handleSellerProducts = async () => {
         try {
-            const token = localStorage.getItem('token'); 
+            const token = localStorage.getItem('token');
             const response = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/seller/product/`, {
-                headers:{
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            }});
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }
+            });
             setproducts(response.data);
             alert('Product fetch successfully');
         } catch (error) {
@@ -169,8 +169,8 @@ const SellerProduct = () => {
     return (
         <>
             {products ? (
-                <>  
-                    
+                <>
+
                     {(errors && showError !== false) && <ErrorComponent> error = {errors}</ErrorComponent>}
                     {!(editMode === true || addMoreMode === true) ? (
                         <div className="flex flex-col p-6 bg-white rounded-lg shadow-md max-w-md mx-auto my-4">
@@ -207,7 +207,7 @@ const SellerProduct = () => {
                                                     <div className='flex flex-row '>
                                                         {selectedOption?.id === product?.id &&
                                                             <p id="offer-price" className='p-2 text-xl font-bold'>
-                                                                Rs.{product?.price-(product?.price * product?.discount) / 100}
+                                                                Rs.{product?.price - (product?.price * product?.discount) / 100}
                                                             </p>
                                                         }
                                                         <p id="actual-price" className={`p-2 ${selectedOption?.id === product?.id ? 'text-xs font-bold text-gray-500 line-through' : 'text-sm font-bold'}`}>

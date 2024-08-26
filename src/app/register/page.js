@@ -36,7 +36,10 @@ const Register = () => {
         e.preventDefault();
         if (validate()) {
             try {
-                await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/auth/register`, formData);
+                await axios(`${process.env.NEXT_PUBLIC_BASE_URL}/auth/register`,{
+                    method:"POST",
+                    data: formData
+                });
                 alert('User registered successfully');
                 handleNavigate('/login');
             } catch (err) {

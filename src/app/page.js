@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation'; // Use from 'next/navigation' for Next.js 13+
-
+import {config} from "dotenv"
 const Home = () => {
     const router = useRouter();
     const token = localStorage.getItem('token'); ; // Replace with your actual selector for token

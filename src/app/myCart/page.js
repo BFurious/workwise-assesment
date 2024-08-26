@@ -51,6 +51,9 @@ const ProductOptions = () => {
                     'Authorization': `Bearer ${token}`
                 }
             });
+            if (cartItems.status != 200) 
+                throw new Error('Error fetching cart, try again later...');
+            
             setproducts(cartItems.data);
         } catch (error) {
             throw error;
@@ -68,6 +71,10 @@ const ProductOptions = () => {
                         'Authorization': `Bearer ${token}`
                     }
                 });
+
+                if (response.status != 204) 
+                    throw new Error('Error removing product, try again later....');
+                
                 setShowPopup({ show: true, messageArray: ["Deleted", "Deleted item Sucessfully try more"] })
                 setTimeout(() => {
                     setShowPopup(false);
@@ -78,7 +85,7 @@ const ProductOptions = () => {
             }
 
         } else {
-            setErrors("Select Atleast one to delete")
+            showPopup({show:true , messageArray: ["Select Atleast one to delete"]});
         }
     };
 

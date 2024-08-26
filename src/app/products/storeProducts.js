@@ -40,7 +40,7 @@ const StoreProduct = () => {
         if (selectedOption) {
             try {
                 const token = localStorage.getItem('token'); // Get token from localStorage
-                await axios(`${process.env.NEXT_PUBLIC_BASE_URL}/buyer/product/add-cart`, {
+                const response = await axios(`${process.env.NEXT_PUBLIC_BASE_URL}/buyer/product/add-cart`, {
                     method: "POST",
                     headers: {
                         'Content-Type': 'application/json',
@@ -48,13 +48,17 @@ const StoreProduct = () => {
                     },
                     data: payload
                 });
+
+                if (response.status != 201) 
+                    throw new Error('Error updating product');
+                
                 setShowPopup({ show: true, messageArray: ["Added", "item Added to cart Sucessfully try more"] })
                 setTimeout(() => {
                     setShowPopup(false);
                 }, 3000);
                 setTimeout(() => setOrderAdded(false), 3000);
             } catch (e) {
-                console.error(e);
+                alert(e);
             }
         }
     };
@@ -68,9 +72,12 @@ const StoreProduct = () => {
                     'Authorization': `Bearer ${token}`
                 }
             });
+            if (allItems.status != 200) 
+                throw new Error('Error updating product');
+            
             setproducts(allItems.data);
         } catch (error) {
-            throw error;
+            alert(error);
         }
     };
 

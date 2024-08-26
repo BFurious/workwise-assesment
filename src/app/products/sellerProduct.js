@@ -132,15 +132,13 @@ const SellerProduct = () => {
                         'Authorization': `Bearer ${token}`
                     }
                 });
-                if (response.status!=200)
-                    throw new Error('Error deleting product');
                 setShowPopup({ show: true, messageArray: ["Deleted", "Deleted item Sucessfully try more"] })
                 setTimeout(() => {
                     setShowPopup(false);
                 }, 3000);
                 router.push('/products');
             } catch (error) {
-                alert(error);
+                alert('Error deleting product');
             }
 
         } else {

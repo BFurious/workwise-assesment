@@ -1,13 +1,10 @@
 'use client'
 
 import React from 'react';
-import { useState, useEffect } from 'react';
-import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { useSelector } from 'react-redux';
 import BuyerDashBoard from './buyerDashboard';
 import SellerDashBoard from './sellerDashboard';
-import { useDispatch } from 'react-redux';
 import NavigationBar from "../../components/navigation/navigation"
 
 const Dashboard = () => {

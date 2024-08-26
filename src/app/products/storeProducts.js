@@ -10,7 +10,7 @@ import {useRouter} from 'next/navigation';
 
 const StoreProduct = () => {
     const [selectedOption, setSelectedOption] = useState(null);
-    const optionRefs = useRef({});
+    const optionRefs = useRef({ });
     const email = useSelector((state) => state.user.email);
     const role = useSelector((state) => state.user.role);
     const [showPopup, setShowPopup] = useState({ show: false, messageArray: [] });
@@ -27,7 +27,7 @@ const StoreProduct = () => {
     }
     // theis fucntion will handle the vales of the product it chose
     const handleOptionChange = async (product) => {
-        setSelectedOption((op) => { return product });
+        setSelectedOption(product);
         optionRefs.current[product?.id]?.focus();  // This line focuses on the expanded component
     };
 
@@ -119,11 +119,11 @@ const StoreProduct = () => {
                                                 <div className='flex flex-row '>
                                                     {selectedOption?.id === product?.id &&
                                                         <p id="offer-price" className='p-2 text-xl font-bold'>
-                                                            Rs.{product?.price - (product?.price * product?.discount) / 100}
+                                                            Rs.{(product?.price - (product?.price * product?.discount) / 100)?.toFixed(2)}
                                                         </p>
                                                     }
                                                     <p id="actual-price" className={`p-2 ${selectedOption?.id === product?.id ? 'text-xs font-bold text-gray-500 line-through' : 'text-sm font-bold'}`}>
-                                                        Rs.{product?.price}
+                                                        Rs.{(product?.price)?.toFixed(2)}
                                                     </p>
                                                 </div>
 

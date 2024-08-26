@@ -1,7 +1,6 @@
 'use client'
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import Image from 'next/image'; // Next.js Image component for optimized images
 import { useDispatch } from 'react-redux';
 import { logout } from '@/store/actions/userActions';
 const NavigationBar = () => {

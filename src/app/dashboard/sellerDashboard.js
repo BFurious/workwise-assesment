@@ -1,11 +1,7 @@
 'use client'
 
 import React from 'react';
-import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useSelector } from 'react-redux';
-import UserForm from '../../components/form/userForm';
-
 
 const SellerDashBoard = () => {
     const router = useRouter();

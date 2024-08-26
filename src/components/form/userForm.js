@@ -27,8 +27,8 @@ const UserForm = ({ formName, initialFormData, onSubmit, validationSchema }) => 
         // Validate form data
         const validationErrors = validationSchema(formData);
         if (Object.keys(validationErrors).length) {
-            setShowErrors(true);
             setErrors(validationErrors);
+            setShowErrors(true);
             setTimeout(() => {
                 setShowErrors(false);
             }, 3000);
@@ -61,7 +61,7 @@ const UserForm = ({ formName, initialFormData, onSubmit, validationSchema }) => 
                         </option>
                     ))}
                 </select>
-                {errors[name] && <p className="text-red-500 text-sm mt-1">{errors[name]}</p>}
+                {(errors[name]  && showError === true) && <ErrorComponent error = {errors[name]} />}
             </div>
         ) : (
             <div className="mb-4" key={name}>
@@ -75,7 +75,7 @@ const UserForm = ({ formName, initialFormData, onSubmit, validationSchema }) => 
                     placeholder={placeholder}
                     disabled={disabled}
                 />
-                {(errors[name] && showError !== false) && <ErrorComponent> error = {errors[name]}</ErrorComponent>}
+                {(errors[name] && showError === true) && <ErrorComponent error = {errors[name]} />}
             </div>
         );
     };

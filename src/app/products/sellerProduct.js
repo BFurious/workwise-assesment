@@ -5,22 +5,18 @@ import ExpandableOptions from '../../components/ExpandingComponent/ExpandableOpt
 import "../../app/globals.css";
 import ColorStripPattern from "../../components/offerComponent/ColorStripPattern";
 import PopUpMessage from '@/components/PopUp/PopUpMessage';
-import { useSelector } from 'react-redux';
+import { useRouter } from 'next/navigation';
 import axios from 'axios';
-import ErrorComponent from '@/components/form/formError';
 import UserForm from '@/components/form/userForm';
 
 const SellerProduct = () => {
     const optionRefs = useRef({});
     const [selectedOption, setSelectedOption] = useState(null);
-    const email = useSelector((state) => state.user.email);
-    const [showError, setShowErrors] = useState(false);
-    const [errors, setErrors] = useState({});
     const [showPopup, setShowPopup] = useState({ show: false, messageArray: [] });
-
     const [addMoreMode, setAddMoreMode] = useState(false);
     const [editMode, setEditMode] = useState(false);
     const [products, setproducts] = useState([])
+    const router = useRouter();
 
     const initialEditFormData = {
         fields: [
@@ -45,6 +41,13 @@ const SellerProduct = () => {
         tempErrors.name = formData.name ? '' : 'Name is required';
         tempErrors.category = formData.category ? '' : 'category is required';
         tempErrors.price = formData.price ? '' : 'price is required';
+        if (formData.price && isNaN(formData.price)) {
+            tempErrors.price = 'Price must be a number';
+        }
+        formData.discount = formData.discount === null ? 0 : formData.discount;
+        if (formData.discount && isNaN(formData.discount)) {
+            tempErrors.discount = 'Discount must be a number';
+        }
         const errors = Object.entries(tempErrors).filter(([key, value]) => value !== "");
         // The result will be an array of key-value pairs (tuples) where value is the error message
         return Object.fromEntries(errors);;
@@ -52,7 +55,7 @@ const SellerProduct = () => {
 
     useEffect(() => {
         handleSellerProducts();
-    }, []);
+    }, [selectedOption]);
 
     const handleEditProduct = async (formData) => {
 
@@ -124,13 +127,14 @@ const SellerProduct = () => {
         if (selectedOption) {
             try {
                 const token = localStorage.getItem('token');
-                const response = axios.delete(`${process.env.NEXT_PUBLIC_BASE_URL}/seller/product/delete/${selectedOption?.id}`, {
+                const response = axios(`${process.env.NEXT_PUBLIC_BASE_URL}/seller/product/delete/${selectedOption?.id}`, {
+                    method: "DELETE",
                     headers: {
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${token}`
                     }
                 });
-                if (response.status != 204)
+                if (!response.ok)
                     throw new Error('Error deleting product');
                 setShowPopup({ show: true, messageArray: ["Deleted", "Deleted item Sucessfully try more"] })
                 setTimeout(() => {
@@ -145,9 +149,10 @@ const SellerProduct = () => {
         }
     };
     // theis fucntion will handle the vales of the product it chose
-    const handleOptionChange = async (key, product) => {
+    const handleOptionChange = async (product) => {
         setSelectedOption(product);
-        optionRefs.current[key]?.focus();  // This line focuses on the expanded component
+
+        optionRefs.current[product?.id]?.focus();  // This line focuses on the expanded component
     };
 
     const handleSellerProducts = async () => {
@@ -170,8 +175,6 @@ const SellerProduct = () => {
         <>
             {products ? (
                 <>
-
-                    {(errors && showError !== false) && <ErrorComponent> error = {errors}</ErrorComponent>}
                     {!(editMode === true || addMoreMode === true) ? (
                         <div className="flex flex-col p-6 bg-white rounded-lg shadow-md max-w-md mx-auto my-4">
                             <h2 className="font-inter text-center text-red-500 font-bold mb-6 text-3xl">Your Products</h2>
@@ -181,7 +184,7 @@ const SellerProduct = () => {
                                         className={`border rounded-xl  min-w-full flex-1 my-2 overflow-hidden ${selectedOption?.id === product?.id ? 'border-green-500' : ''} `}>
                                         <div
                                             className={`flex flex-row flex-1 transition-max-height duration-300 ease-in-out ${selectedOption?.id === product?.id ? 'h-60' : 'h-24'} `}
-                                            onClick={() => handleOptionChange(product?.id, product)}
+                                            onClick={() => handleOptionChange(product)}
                                         >
                                             {selectedOption?.id !== product?.id && <ColorStripPattern discount={product?.discount} />}
                                             <div className={`flex w-full flex-row item-center ${selectedOption?.id === product?.id ? "bg-green-50" : ""}`}>
@@ -191,7 +194,7 @@ const SellerProduct = () => {
                                                             type="checkbox"
                                                             name="product"
                                                             className="mr-2"
-                                                            onChange={() => handleOptionChange(product?.id, product)}
+                                                            onChange={() => handleOptionChange(product)}
                                                             checked={selectedOption?.id === product?.id}
                                                         />
                                                     </name>
@@ -207,11 +210,11 @@ const SellerProduct = () => {
                                                     <div className='flex flex-row '>
                                                         {selectedOption?.id === product?.id &&
                                                             <p id="offer-price" className='p-2 text-xl font-bold'>
-                                                                Rs.{product?.price - (product?.price * product?.discount) / 100}
+                                                                Rs.{(product?.price - (product?.price * product?.discount) / 100)?.toFixed(2)}
                                                             </p>
                                                         }
                                                         <p id="actual-price" className={`p-2 ${selectedOption?.id === product?.id ? 'text-xs font-bold text-gray-500 line-through' : 'text-sm font-bold'}`}>
-                                                            Rs.{product?.price}
+                                                            Rs.{(product?.price)?.toFixed(2)}
                                                         </p>
                                                     </div>
 

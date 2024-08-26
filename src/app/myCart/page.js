@@ -39,6 +39,7 @@ const ProductOptions = () => {
     // theis fucntion will handle the vales of the product it chose
     const handleOptionChange = async (option) => {
         setSelectedOption((op) => { return option });
+
         optionRefs.current[option?.id]?.focus();  // This line focuses on the expanded component
     };
 
@@ -131,11 +132,11 @@ const ProductOptions = () => {
                                                 <div className='flex flex-row '>
                                                     {selectedOption?.products?.id === cartProduct?.products?.id &&
                                                         <p id="offer-price" className='p-2 text-xl font-bold'>
-                                                            Rs.{cartProduct?.products?.price - (cartProduct?.products?.price * cartProduct?.products?.discount) / 100}
+                                                            Rs.{(cartProduct?.products?.price - (cartProduct?.products?.price * cartProduct?.products?.discount) / 100)?.toFixed(2)}
                                                         </p>
                                                     }
                                                     <p id="actual-price" className={`p-2 ${selectedOption?.products?.id === cartProduct?.products?.id ? 'text-xs font-bold text-gray-500 line-through' : 'text-sm font-bold'}`}>
-                                                        Rs.{cartProduct?.products?.price}
+                                                        Rs.{(cartProduct?.products?.price)?.toFixed(2)}
                                                     </p>
                                                 </div>
 
@@ -155,7 +156,7 @@ const ProductOptions = () => {
 
                         <div className="flex flex-col font-inter mt-6 ">
                             <div className='font-bold font-inter'>
-                                <p>Rs.{finalAmount}</p>
+                                <p>Rs.{(finalAmount)?.toFixed(2)}</p>
                             </div>
                             <button className="mt-4 bg-yellow-500 text-black py-2 px-4 rounded-lg w-full" onClick={() => { router.push("/products") }}>Continue Shopping</button>
                             <div className="flex flex-row flex-1 font-inter">

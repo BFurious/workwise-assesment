@@ -55,7 +55,7 @@ const SellerProduct = () => {
 
     useEffect(() => {
         handleSellerProducts();
-    }, [selectedOption]);
+    }, [editMode, addMoreMode]);
 
     const handleEditProduct = async (formData) => {
 
@@ -80,7 +80,6 @@ const SellerProduct = () => {
                 setShowPopup(false);
             }, 3000);
             setEditMode(false);
-            router.push('/products');
         } catch (error) {
             setEditMode(false);
             alert(error);
@@ -109,7 +108,6 @@ const SellerProduct = () => {
                 setShowPopup(false);
             }, 3000);
             setAddMoreMode(false);
-            router.push('/products');
         } catch (error) {
             setAddMoreMode(false);
             alert(error);
@@ -140,6 +138,7 @@ const SellerProduct = () => {
                 setTimeout(() => {
                     setShowPopup(false);
                 }, 3000);
+                router.push('/products');
             } catch (error) {
                 alert(error);
             }
